@@ -1,0 +1,308 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Jul 28 22:11:24 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A022@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table employee(empno Number (4),Ename varchar (15),Salary Number (7,2),Comm Number(5),Design varchar2(10), Depno Number(2));
+
+Table created.
+
+SQL> desc employee
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(4)
+ ENAME                                              VARCHAR2(15)
+ SALARY                                             NUMBER(7,2)
+ COMM                                               NUMBER(5)
+ DESIGN                                             VARCHAR2(10)
+ DEPNO                                              NUMBER(2)
+
+SQL> create table Emp1 as select * from employee;
+
+Table created.
+
+SQL> desc Emp1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(4)
+ ENAME                                              VARCHAR2(15)
+ SALARY                                             NUMBER(7,2)
+ COMM                                               NUMBER(5)
+ DESIGN                                             VARCHAR2(10)
+ DEPNO                                              NUMBER(2)
+
+SQL> create table Emp2 as select EmpNo,Ename,Salary,DepNo from employee;
+
+Table created.
+
+SQL> desc Emp2
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(4)
+ ENAME                                              VARCHAR2(15)
+ SALARY                                             NUMBER(7,2)
+ DEPNO                                              NUMBER(2)
+
+SQL> Insert into employee values (1234,'KEERTHI',10000,23,'Developer', 5);
+
+1 row created.
+
+SQL> select * from employee
+  2  ;
+
+     EMPNO ENAME               SALARY       COMM DESIGN          DEPNO
+---------- --------------- ---------- ---------- ---------- ----------
+      1234 KEERTHI              10000         23 Developer           5
+
+SQL> create table Emp3 as select * from employee where 1>2;
+
+Table created.
+
+SQL> desc Emp3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(4)
+ ENAME                                              VARCHAR2(15)
+ SALARY                                             NUMBER(7,2)
+ COMM                                               NUMBER(5)
+ DESIGN                                             VARCHAR2(10)
+ DEPNO                                              NUMBER(2)
+
+SQL> create table Emp4 as select * from employee
+  2  ;
+
+Table created.
+
+SQL> select * from Emp4;
+
+     EMPNO ENAME               SALARY       COMM DESIGN          DEPNO
+---------- --------------- ---------- ---------- ---------- ----------
+      1234 KEERTHI              10000         23 Developer           5
+
+SQL> create table Emp5 as select EmpNo,Ename,depNo from employee ehere 1>2;
+create table Emp5 as select EmpNo,Ename,depNo from employee ehere 1>2
+                                                                  *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL>  create table Emp5 as select EmpNo,Ename,depNo from employee ehere 1>2;
+ create table Emp5 as select EmpNo,Ename,depNo from employee ehere 1>2
+                                                                   *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> create table Emp5 as select EmpNo,Ename,depNo from employee where 1>2;
+
+Table created.
+
+SQL> select * from Emp5
+  2  ;
+
+no rows selected
+
+SQL> select * from Emp5;
+
+no rows selected
+
+SQL> desc Emp5;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(4)
+ ENAME                                              VARCHAR2(15)
+ DEPNO                                              NUMBER(2)
+
+SQL> create table Emp6 as select EmoNo,Ename,DeptNo from employee;
+create table Emp6 as select EmoNo,Ename,DeptNo from employee
+                                        *
+ERROR at line 1:
+ORA-00904: "DEPTNO": invalid identifier
+
+
+SQL>  create table Emp6 as select EmoNo,Ename,DeptNo from employee;
+ create table Emp6 as select EmoNo,Ename,DeptNo from employee
+                                         *
+ERROR at line 1:
+ORA-00904: "DEPTNO": invalid identifier
+
+
+SQL> create table Emp6 as select EmoNo,Ename,DepNo from employee;
+create table Emp6 as select EmoNo,Ename,DepNo from employee
+                            *
+ERROR at line 1:
+ORA-00904: "EMONO": invalid identifier
+
+
+SQL> create table Emp6 as select EmpNO,Ename,DepNo from employee;
+
+Table created.
+
+SQL> select * from Emp6
+  2  ;
+
+     EMPNO ENAME                DEPNO
+---------- --------------- ----------
+      1234 KEERTHI                  5
+
+SQL> Alter table employee modify Ename varchar2(10);
+
+Table altered.
+
+SQL> Alter table employee modify EmpNo Number (5) Design varchar2 (15));
+Alter table employee modify EmpNo Number (5) Design varchar2 (15))
+                                             *
+ERROR at line 1:
+ORA-01735: invalid ALTER TABLE option
+
+
+SQL> alter table employee modify EmpNo Number (5)
+  2  Design Varchar2(15));
+Design Varchar2(15))
+*
+ERROR at line 2:
+ORA-01735: invalid ALTER TABLE option
+
+
+SQL> Alter table employee modify EmpNo Number (5);
+
+Table altered.
+
+SQL> Rename Emp6 to Empsix;
+
+Table renamed.
+
+SQL> Insert into employee (Empno,Ename,DepNO)
+  2  value(3456,'TEJA',4);
+value(3456,'TEJA',4)
+*
+ERROR at line 2:
+ORA-00926: missing VALUES keyword
+
+
+SQL>  Insert into employee (Empno,Ename,DepNO)
+  2    2  value(3456,'TEJA',4);
+  2  value(3456,'TEJA',4)
+  *
+ERROR at line 2:
+ORA-00926: missing VALUES keyword
+
+
+SQL> Insert intoemployee (EmpNo,Ename,DepNo)
+  2  values (3456,'TEJA',4);
+Insert intoemployee (EmpNo,Ename,DepNo)
+       *
+ERROR at line 1:
+ORA-00925: missing INTO keyword
+
+
+SQL> Insert into employee (EmpNO,Ename,DepNo)
+  2  values (3456,'TEJA',4);
+
+1 row created.
+
+SQL> select * from employee;
+
+     EMPNO ENAME          SALARY       COMM DESIGN          DEPNO
+---------- ---------- ---------- ---------- ---------- ----------
+      1234 KEERTHI         10000         23 Developer           5
+      3456 TEJA                                                 4
+
+SQL> Insert into Emp5 values (& EmoNO,'&Ename',&DepNO);
+Enter value for emono: 5678
+Enter value for ename: Sujatha
+Enter value for depno: 2
+old   1: Insert into Emp5 values (& EmoNO,'&Ename',&DepNO)
+new   1: Insert into Emp5 values (5678,'Sujatha',2)
+
+1 row created.
+
+SQL> select * from Emp5
+  2  ;
+
+     EMPNO ENAME                DEPNO
+---------- --------------- ----------
+      5678 Sujatha                  2
+
+SQL> Insert into Emp7 select * from Emp5;
+Insert into Emp7 select * from Emp5
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> Insert into Emp7 select * from Emp5;
+Insert into Emp7 select * from Emp5
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> select * from Emp7;
+select * from Emp7
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> Update Emp6 set EmpNo = 0001 where DepNo = 5;
+Update Emp6 set EmpNo = 0001 where DepNo = 5
+       *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> update Empsix set EmpNo = 0001 where DepNo = 5;
+
+1 row updated.
+
+SQL> select * from Empsix
+  2  ;
+
+     EMPNO ENAME                DEPNO
+---------- --------------- ----------
+         1 KEERTHI                  5
+
+SQL> update employee set Salary = 300000,Comm = 60 where EmpNo = 1234;
+update employee set Salary = 300000,Comm = 60 where EmpNo = 1234
+                             *
+ERROR at line 1:
+ORA-01438: value larger than specified precision allowed for this column
+
+
+SQL> update employee set Salary = 20000,Comm 80 where EMPNo = 1234;
+update employee set Salary = 20000,Comm 80 where EMPNo = 1234
+                                        *
+ERROR at line 1:
+ORA-00927: missing equal sign
+
+
+SQL> update employee set Salary = 20000,Comm = 80 where EmpN0 = 1234;
+update employee set Salary = 20000,Comm = 80 where EmpN0 = 1234
+                                                   *
+ERROR at line 1:
+ORA-00904: "EMPN0": invalid identifier
+
+
+SQL> update employee set Salary = 20000,Comm = 80 where EmpNo = 1234;
+
+1 row updated.
+
+SQL> select * from employee;
+
+     EMPNO ENAME          SALARY       COMM DESIGN          DEPNO
+---------- ---------- ---------- ---------- ---------- ----------
+      1234 KEERTHI         20000         80 Developer           5
+      3456 TEJA                                                 4
+
+SQL> Drop table Empsix;
+
+Table dropped.
+
+SQL> update employee set Salary = 20000,Comm = 80 where EmpN0 = 1234;
