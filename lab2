@@ -151,3 +151,17 @@ SQL> desc course1
  COURSENAME                                NOT NULL VARCHAR2(20)
 
 SQL>
+SP2-0042: unknown command "keeths" - rest of line ignored.
+SQL> select * from course1 where coursename like '%a';
+
+COURSEID    COURSEFEE COURSENAME
+---------- ---------- --------------------
+15              20000 keerthana
+16              30000 teja
+
+SQL> select * from course1 where coursename like '%n';
+
+no rows selected
+
+SQL>
+
