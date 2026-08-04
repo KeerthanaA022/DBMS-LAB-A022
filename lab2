@@ -1,0 +1,153 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Aug 4 15:47:18 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A022@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table course(
+  2    2  courseid number(4) Primary key,
+  3    3  coursename varchar2(20)) Not null
+  4  );
+  2  courseid number(4) Primary key,
+  *
+ERROR at line 2:
+ORA-00904: : invalid identifier
+
+
+SQL> create table course(
+  2  courseid number(4) Primary key,
+  3  coursename varchar2(20)) Not null
+  4  );
+coursename varchar2(20)) Not null
+                         *
+ERROR at line 3:
+ORA-00922: missing or invalid option
+
+
+SQL> create table course(
+  2  course number(4) Primary key'
+  3  coursename varchar2(20) Not null,
+  4  );
+course number(4) Primary key'
+                            *
+ERROR at line 2:
+ORA-01756: quoted string not properly terminated
+
+
+SQL> create table course(
+  2  courseid number(4) Primary key,
+  3  course name varchar2(20) Not null
+  4  );
+course name varchar2(20) Not null
+            *
+ERROR at line 3:
+ORA-00907: missing right parenthesis
+
+
+SQL> create table course(
+  2  courseid char(10) Primary key,
+  3  coursefee number(8,2),
+  4  coursename varchar2(20) Not Null
+  5  );
+create table course(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table course1(
+  2     courseid char(10) Primary key,
+  3      coursefee number(8,2),
+  4    coursename varchar2(20) Not Null
+  5     );
+
+Table created.
+
+SQL> desc course1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSEID                                  NOT NULL CHAR(10)
+ COURSEFEE                                          NUMBER(8,2)
+ COURSENAME                                NOT NULL VARCHAR2(20)
+
+SQL> create table student(
+  2  studentid number(4) Primary key,
+  3  studentname varchar2(20) Not Null,
+  4  email varchar(30),
+  5  deptname char(15),
+  6  courseid Not null Reference course1(courseid)
+  7  );
+courseid Not null Reference course1(courseid)
+                  *
+ERROR at line 6:
+ORA-00907: missing right parenthesis
+
+
+SQL> create table student1(
+  2  studentid char(10) Primary key,
+  3  studentname varchar2(20) Not Null,
+  4  email varchar(30),
+  5  courseid Not Null References course1(courseid)
+  6  );
+
+Table created.
+
+SQL> desc student1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDENTID                                 NOT NULL CHAR(10)
+ STUDENTNAME                               NOT NULL VARCHAR2(20)
+ EMAIL                                              VARCHAR2(30)
+ COURSEID                                  NOT NULL CHAR(10)
+
+SQL>
+SQL> insert into course1 values(30,'cse','keerthana');
+insert into course1 values(30,'cse','keerthana')
+                              *
+ERROR at line 1:
+ORA-01722: invalid number
+
+
+SQL>
+SQL> insert into course1 values(10,'keerthana');
+insert into course1 values(10,'keerthana')
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> insert into course1 values(15,20000,'keerthana');
+
+1 row created.
+
+SQL> insert into course1 values(15,20000,'teja');
+insert into course1 values(15,20000,'teja')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (A022.SYS_C0029169) violated
+
+
+SQL> insert into course1 values(16,30000,'teja');
+
+1 row created.
+
+SQL> select * from course1;
+
+COURSEID    COURSEFEE COURSENAME
+---------- ---------- --------------------
+15              20000 keerthana
+16              30000 teja
+
+SQL> desc course1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSEID                                  NOT NULL CHAR(10)
+ COURSEFEE                                          NUMBER(8,2)
+ COURSENAME                                NOT NULL VARCHAR2(20)
+
+SQL>
