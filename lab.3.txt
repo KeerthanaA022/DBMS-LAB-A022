@@ -1,0 +1,190 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Aug 11 15:33:27 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A022@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table student(
+  2
+SQL> create table course(
+  2  courseid char(10),
+  3  coursefee number(8,2),
+  4  coursename varchar2(20)
+  5  );
+create table course(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table course3(
+  2  courseid char(10),
+  3  coursefee number(8,2),
+  4  coursename varchar2(20)
+  5  );
+
+Table created.
+
+SQL> create table student3(
+  2  studentid char(10),
+  3  studentname varchar2(20)
+  4  email varchar(30)
+  5  );
+email varchar(30)
+*
+ERROR at line 4:
+ORA-00907: missing right parenthesis
+
+
+SQL> create table student3(
+  2     studentid char(10),
+  3     studentname varchar2(20),
+  4      email varchar(30)
+  5      );
+
+Table created.
+
+SQL> desc course3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSEID                                           CHAR(10)
+ COURSEFEE                                          NUMBER(8,2)
+ COURSENAME                                         VARCHAR2(20)
+
+SQL> desc student3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDENTID                                          CHAR(10)
+ STUDENTNAME                                        VARCHAR2(20)
+ EMAIL                                              VARCHAR2(30)
+
+SQL> insert into course3 values (5,3000,'deepa');
+
+1 row created.
+
+SQL> insert into course3 values (7,4000.'deep');
+insert into course3 values (7,4000.'deep')
+                                   *
+ERROR at line 1:
+ORA-00917: missing comma
+
+
+SQL> insert into course3 values(7,4000,'rani');
+
+1 row created.
+
+SQL> select * from course3;
+
+COURSEID    COURSEFEE COURSENAME
+---------- ---------- --------------------
+5                3000 deepa
+7                4000 rani
+
+SQL> Alter table course3 Modify comm
+  2  varchar2(7);
+Alter table course3 Modify comm
+                           *
+ERROR at line 1:
+ORA-00904: "COMM": invalid identifier
+
+
+SQL> Alter Table course3 Modify(courseid char(10) Primary key,coursename varchar2(20) Not Null);
+
+Table altered.
+
+SQL> desc course3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSEID                                  NOT NULL CHAR(10)
+ COURSEFEE                                          NUMBER(8,2)
+ COURSENAME                                NOT NULL VARCHAR2(20)
+
+SQL> Alter Table course3 Modify varchar2(25);
+Alter Table course3 Modify varchar2(25)
+                           *
+ERROR at line 1:
+ORA-00904: : invalid identifier
+
+
+SQL> Alter table course3 Modify couesename Varchar2(25);
+Alter table course3 Modify couesename Varchar2(25)
+                           *
+ERROR at line 1:
+ORA-00904: "COUESENAME": invalid identifier
+
+
+SQL> Alter Table course3 Modify coursename Varchar2(25);
+
+Table altered.
+
+SQL> Alter Table course3 Add(coursesection,coursenumber);
+Alter Table course3 Add(coursesection,coursenumber)
+                        *
+ERROR at line 1:
+ORA-02263: need to specify the datatype for this column
+
+
+SQL> Alter Table course3 Add(Grade char,sex char);
+
+Table altered.
+
+SQL> desc course3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSEID                                  NOT NULL CHAR(10)
+ COURSEFEE                                          NUMBER(8,2)
+ COURSENAME                                NOT NULL VARCHAR2(25)
+ GRADE                                              CHAR(1)
+ SEX                                                CHAR(1)
+
+SQL> Alter Table course3 Drop Column(comm,Sex);
+Alter Table course3 Drop Column(comm,Sex)
+                               *
+ERROR at line 1:
+ORA-00904: : invalid identifier
+
+
+SQL> Alter Table course3 Drop Column(Sex);
+Alter Table course3 Drop Column(Sex)
+                               *
+ERROR at line 1:
+ORA-00904: : invalid identifier
+
+
+SQL> Alter Table course3 Drop Column(sex char(1));
+Alter Table course3 Drop Column(sex char(1))
+                               *
+ERROR at line 1:
+ORA-00904: : invalid identifier
+
+
+SQL> desc course3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSEID                                  NOT NULL CHAR(10)
+ COURSEFEE                                          NUMBER(8,2)
+ COURSENAME                                NOT NULL VARCHAR2(25)
+ GRADE                                              CHAR(1)
+ SEX                                                CHAR(1)
+
+SQL> create table student3(
+  2     studentid char(10),
+  3     studentname varchar2(20),
+  4      email varchar(30)
+  5  \l;/;jl
+  6
+SQL>
+SQL>
+SQL> create table student3(
+  2     studentid char(10),
+  3     studentname varchar2(20),
+  4      email varchar(30)
+  5
+SQL> ]
+SP2-0042: unknown command "]" - rest of line ignored.
+SQL> Alter Table Drop course3
