@@ -1,0 +1,142 @@
+SQL*Plus: Release 11.2.0.1.0 Production on Tue Sep 8 15:34:01 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A022@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> create table employee(
+  2  emp_ID number(5) primary key,
+  3  emp_name varchar2(30),
+  4  salary number(8)
+  5  );
+create table employee(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table employeek1(
+  2  emp_ID number(5) primary key,
+  3  emp_name varchar2(30),
+  4  salary number(8)
+  5  );
+
+Table created.
+
+SQL> INSERT INTO EMPLOYEEk1 VALUES (101,'ARUN',35000);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEEk1 VALUES (102,'BALA',40000);
+
+1 row created.
+
+SQL> grant select
+  2  on employeek1
+  3  to scott;
+
+Grant succeeded.
+
+SQL> grant select,insert,update
+  2  on employee
+  3  from scott;
+from scott
+*
+ERROR at line 3:
+ORA-00905: missing keyword
+
+
+SQL> grant select,insert,update
+  2  on employeek1
+  3  tp scott;
+tp scott
+*
+ERROR at line 3:
+ORA-00905: missing keyword
+
+
+SQL> grant select,insert,update
+  2  on employeek1
+  3  to scott;
+
+Grant succeeded.
+
+SQL> revoke insert
+  2  on employee
+  3  from scott;
+revoke insert
+*
+ERROR at line 1:
+ORA-01927: cannot REVOKE privileges you did not grant
+
+
+SQL> revoke insert
+  2  on employeek1
+  3  from scott;
+
+Revoke succeeded.
+
+SQL> insert into employeek1 value (103,'divya',45000);
+insert into employeek1 value (103,'divya',45000)
+                              *
+ERROR at line 1:
+ORA-00928: missing SELECT keyword
+
+
+SQL> INSERT INTO EMPLOYEEk1 VALUES (103,'DIVYA',45000);
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> INSERT INTO EMPLOYEEk1 VALUES (104,'KAVI',42000);
+
+1 row created.
+
+SQL> savepoint sp1
+  2  ;
+
+Savepoint created.
+
+SQL> insert into employee values (105,'ravi',38000);
+insert into employee values (105,'ravi',38000)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> insert into employeek1 values (105,'ravi',38000);
+
+1 row created.
+
+SQL> rollback to sp1;
+
+Rollback complete.
+
+SQL> select * from employee;
+
+     EMPNO ENAME          SALARY       COMM DESIGN          DEPNO
+---------- ---------- ---------- ---------- ---------- ----------
+      1234 KEERTHI         20000         80 Developer           5
+      3456 TEJA                                                 4
+
+SQL> select * from employeek1;
+
+    EMP_ID EMP_NAME                           SALARY
+---------- ------------------------------ ----------
+       101 ARUN                                35000
+       102 BALA                                40000
+       103 DIVYA                               45000
+       104 KAVI                                42000
+
+SQL> commit;
+
+Commit complete.
+
+SQL>
