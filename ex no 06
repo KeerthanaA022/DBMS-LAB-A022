@@ -1,0 +1,175 @@
+
+-- SQL*Plus: Release 11.2.0.1.0 Production
+-- Enter user-name: A022@db2021
+-- Enter password:
+-- Connected to:
+-- Oracle Database 11g Release 11.2.0.1.0 - Production
+
+CREATE TABLE STUDENT
+(
+    STUDENT_ID NUMBER(5) PRIMARY KEY,
+    STUDENT_NAME VARCHAR2(30),
+    DEPARTMENT VARCHAR2(20),
+    MARKS NUMBER(3)
+);
+
+-- OUTPUT:
+-- Table created.
+
+-- 2. INSERT RECORDS
+
+INSERT INTO STUDENT VALUES (101,'ARUN','CSE',85);
+INSERT INTO STUDENT VALUES (102,'BALA','ECE',78);
+INSERT INTO STUDENT VALUES (103,'DIVYA','IT',92);
+INSERT INTO STUDENT VALUES (104,'KAVI','CSE',88);
+INSERT INTO STUDENT VALUES (105,'RAVI','ECE',81);
+INSERT INTO STUDENT VALUES (106,'SURESH','IT',95);
+
+-- OUTPUT:
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+
+-- 3. COUNT FUNCTION
+
+SELECT COUNT(*) AS TOTAL_STUDENTS
+FROM STUDENT;
+
+-- OUTPUT:
+-- TOTAL_STUDENTS
+-- --------------
+-- 6
+
+-- 4. SUM FUNCTION
+
+SELECT SUM(MARKS) AS TOTAL_MARKS
+FROM STUDENT;
+
+-- OUTPUT:
+-- TOTAL_MARKS
+-- -----------
+-- 519
+
+-- 5. AVG FUNCTION
+
+SELECT AVG(MARKS) AS AVERAGE_MARKS
+FROM STUDENT;
+
+-- OUTPUT:
+-- AVERAGE_MARKS
+-- -------------
+-- 86.5
+
+-- 6. MAX FUNCTION
+
+SELECT MAX(MARKS) AS HIGHEST_MARK
+FROM STUDENT;
+
+-- OUTPUT:
+-- HIGHEST_MARK
+-- ------------
+-- 95
+
+-- 7. MIN FUNCTION
+
+SELECT MIN(MARKS) AS LOWEST_MARK
+FROM STUDENT;
+
+-- OUTPUT:
+-- LOWEST_MARK
+-- -----------
+-- 78
+
+-- 8. GROUP BY CLAUSE
+
+SELECT DEPARTMENT, COUNT(*) AS TOTAL_STUDENTS
+FROM STUDENT
+GROUP BY DEPARTMENT;
+
+-- OUTPUT:
+-- DEPARTMENT  TOTAL_STUDENTS
+-- ----------  --------------
+-- CSE         2
+-- ECE         2
+-- IT          2
+
+-- 9. GROUP BY WITH AVG FUNCTION
+
+SELECT DEPARTMENT, AVG(MARKS) AS AVG_MARKS
+FROM STUDENT
+GROUP BY DEPARTMENT;
+
+-- OUTPUT:
+-- DEPARTMENT  AVG_MARKS
+-- ----------  ---------
+-- CSE         86.5
+-- ECE         79.5
+-- IT          93.5
+
+-- 10. HAVING CLAUSE
+-- Departments having average marks greater than 80
+
+SELECT DEPARTMENT, AVG(MARKS) AS AVG_MARKS
+FROM STUDENT
+GROUP BY DEPARTMENT
+HAVING AVG(MARKS) > 80;
+
+-- OUTPUT:
+-- DEPARTMENT  AVG_MARKS
+-- ----------  ---------
+-- CSE         86.5
+-- IT          93.5
+
+-- 11. HAVING WITH COUNT FUNCTION
+-- Departments having more than one student
+
+SELECT DEPARTMENT, COUNT(*) AS TOTAL_STUDENTS
+FROM STUDENT
+GROUP BY DEPARTMENT
+HAVING COUNT(*) > 1;
+
+-- OUTPUT:
+-- DEPARTMENT  TOTAL_STUDENTS
+-- ----------  --------------
+-- CSE         2
+-- ECE         2
+-- IT          2
+
+-- 12. COMBINED GROUP BY AND HAVING
+
+SELECT DEPARTMENT,
+       COUNT(*) AS NO_OF_STUDENTS,
+       AVG(MARKS) AS AVG_MARKS,
+       MAX(MARKS) AS HIGHEST_MARK
+FROM STUDENT
+GROUP BY DEPARTMENT
+HAVING AVG(MARKS) > 80;
+
+-- OUTPUT:
+-- DEPARTMENT  NO_OF_STUDENTS  AVG_MARKS  HIGHEST_MARK
+-- ----------  --------------  ---------  ------------
+-- CSE         2               86.5       88
+-- IT          2               93.5       95
+
+-- 13. DISPLAY ALL RECORDS
+
+SELECT * FROM STUDENT;
+
+-- OUTPUT:
+-- STUDENT_ID  STUDENT_NAME  DEPARTMENT  MARKS
+-- ----------  ------------  ----------  -----
+-- 101         ARUN          CSE         85
+-- 102         BALA          ECE         78
+-- 103         DIVYA         IT          92
+-- 104         KAVI          CSE         88
+-- 105         RAVI          ECE         81
+-- 106         SURESH        IT          95
+
+COMMIT;
+
+-- OUTPUT:
+-- Commit complete.
+
