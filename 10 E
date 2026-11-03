@@ -1,0 +1,144 @@
+
+CREATE TABLE EMPLOYEE
+(
+    EMP_ID NUMBER(5) PRIMARY KEY,
+    EMP_NAME VARCHAR2(30),
+    DEPARTMENT VARCHAR2(20),
+    SALARY NUMBER(8)
+);
+
+-- OUTPUT:
+-- Table created.
+
+
+-- STEP 2: Insert Sample Records
+
+INSERT INTO EMPLOYEE VALUES (101,'ARUN','CSE',35000);
+INSERT INTO EMPLOYEE VALUES (102,'BALA','ECE',32000);
+INSERT INTO EMPLOYEE VALUES (103,'DIVYA','IT',45000);
+INSERT INTO EMPLOYEE VALUES (104,'KAVI','CSE',40000);
+COMMIT;
+
+-- OUTPUT:
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- Commit complete.
+
+
+-- PART A: IMPLICIT CURSOR
+
+-- AIM:
+-- To use an implicit cursor to update employee salaries
+-- and display the number of rows affected.
+
+SET SERVEROUTPUT ON;
+
+BEGIN
+    UPDATE EMPLOYEE
+    SET SALARY = SALARY + 5000
+    WHERE DEPARTMENT = 'CSE';
+
+    DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT || ' row(s) updated.');
+    COMMIT;
+END;
+/
+
+-- OUTPUT:
+-- 2 row(s) updated.
+-- PL/SQL procedure successfully completed.
+
+
+-- VERIFY THE UPDATE
+
+SELECT * FROM EMPLOYEE;
+
+-- OUTPUT:
+-- EMP_ID  EMP_NAME  DEPARTMENT  SALARY
+-- 101     ARUN      CSE         40000
+-- 102     BALA      ECE         32000
+-- 103     DIVYA     IT          45000
+-- 104     KAVI      CSE         45000
+
+
+-- IMPLICIT CURSOR ATTRIBUTES:
+-- SQL%FOUND     : Returns TRUE if rows were affected.
+-- SQL%NOTFOUND  : Returns TRUE if no rows were affected.
+-- SQL%ROWCOUNT  : Returns the number of rows affected.
+-- SQL%ISOPEN    : Always returns FALSE for implicit cursors.
+
+
+-- PART B: EXPLICIT CURSOR
+
+-- AIM:
+-- To use an explicit cursor to retrieve and display
+-- multiple employee records.
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    CURSOR EMP_CURSOR IS
+        SELECT EMP_ID, EMP_NAME, DEPARTMENT, SALARY
+        FROM EMPLOYEE;
+
+    V_ID EMPLOYEE.EMP_ID%TYPE;
+    V_NAME EMPLOYEE.EMP_NAME%TYPE;
+    V_DEPT EMPLOYEE.DEPARTMENT%TYPE;
+    V_SAL EMPLOYEE.SALARY%TYPE;
+
+BEGIN
+    OPEN EMP_CURSOR;
+
+    LOOP
+        FETCH EMP_CURSOR INTO V_ID, V_NAME, V_DEPT, V_SAL;
+        EXIT WHEN EMP_CURSOR%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(V_ID || ' ' || V_NAME || ' ' ||
+                             V_DEPT || ' ' || V_SAL);
+    END LOOP;
+
+    CLOSE EMP_CURSOR;
+END;
+/
+
+-- OUTPUT:
+-- 101 ARUN CSE 40000
+-- 102 BALA ECE 32000
+-- 103 DIVYA IT 45000
+-- 104 KAVI CSE 45000
+-- PL/SQL procedure successfully completed.
+
+
+-- EXPLICIT CURSOR ATTRIBUTES:
+-- EMP_CURSOR%FOUND     : TRUE if the last fetch returned a row.
+-- EMP_CURSOR%NOTFOUND  : TRUE if the last fetch returned no row.
+-- EMP_CURSOR%ROWCOUNT  : Number of rows fetched so far.
+-- EMP_CURSOR%ISOPEN    : TRUE if the cursor is currently open.
+
+
+-- USING A CURSOR FOR LOOP
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    CURSOR EMP_CURSOR IS
+        SELECT EMP_ID, EMP_NAME, SALARY
+        FROM EMPLOYEE;
+
+BEGIN
+    FOR EMP_REC IN EMP_CURSOR LOOP
+        DBMS_OUTPUT.PUT_LINE(EMP_REC.EMP_ID || ' ' ||
+                             EMP_REC.EMP_NAME || ' ' ||
+                             EMP_REC.SALARY);
+    END LOOP;
+END;
+/
+
+-- OUTPUT:
+-- 101 ARUN 40000
+-- 102 BALA 32000
+-- 103 DIVYA 45000
+-- 104 KAVI 45000
+-- PL/SQL procedure successfully completed.
+
