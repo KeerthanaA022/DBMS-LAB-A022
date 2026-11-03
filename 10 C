@@ -1,0 +1,158 @@
+
+
+-- STEP 1: Create the STUDENT Table
+
+CREATE TABLE STUDENT
+(
+    STUDENT_ID NUMBER(5) PRIMARY KEY,
+    STUDENT_NAME VARCHAR2(30),
+    MARKS NUMBER(3)
+);
+
+-- OUTPUT:
+-- Table created.
+
+
+-- STEP 2: Insert Sample Records
+
+INSERT INTO STUDENT VALUES (101,'ARUN',85);
+INSERT INTO STUDENT VALUES (102,'BALA',72);
+INSERT INTO STUDENT VALUES (103,'DIVYA',91);
+COMMIT;
+
+-- OUTPUT:
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- Commit complete.
+
+
+-- STEP 3: Create a Procedure to Display Student Details
+
+CREATE OR REPLACE PROCEDURE GET_STUDENT
+(
+    P_ID IN NUMBER
+)
+IS
+    V_NAME STUDENT.STUDENT_NAME%TYPE;
+    V_MARKS STUDENT.MARKS%TYPE;
+BEGIN
+    SELECT STUDENT_NAME, MARKS
+    INTO V_NAME, V_MARKS
+    FROM STUDENT
+    WHERE STUDENT_ID = P_ID;
+
+    DBMS_OUTPUT.PUT_LINE('Student Name : ' || V_NAME);
+    DBMS_OUTPUT.PUT_LINE('Marks        : ' || V_MARKS);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Student Record Not Found.');
+END;
+/
+
+-- OUTPUT:
+-- Procedure created.
+
+
+-- STEP 4: Execute the Procedure
+
+SET SERVEROUTPUT ON;
+
+EXEC GET_STUDENT(101);
+
+-- OUTPUT:
+-- Student Name : ARUN
+-- Marks        : 85
+-- PL/SQL procedure successfully completed.
+
+-- SAMPLE OUTPUT FOR AN INVALID INPUT:
+
+EXEC GET_STUDENT(110);
+
+-- OUTPUT:
+-- Student Record Not Found.
+-- PL/SQL procedure successfully completed.
+
+
+-- STEP 5: Create a Function to Find the Grade
+
+CREATE OR REPLACE FUNCTION FIND_GRADE
+(
+    P_MARKS NUMBER
+)
+RETURN VARCHAR2
+IS
+    V_GRADE VARCHAR2(2);
+BEGIN
+    IF P_MARKS >= 90 THEN
+        V_GRADE := 'O';
+    ELSIF P_MARKS >= 80 THEN
+        V_GRADE := 'A+';
+    ELSIF P_MARKS >= 70 THEN
+        V_GRADE := 'A';
+    ELSIF P_MARKS >= 60 THEN
+        V_GRADE := 'B';
+    ELSE
+        V_GRADE := 'C';
+    END IF;
+
+    RETURN V_GRADE;
+END;
+/
+
+-- OUTPUT:
+-- Function created.
+
+
+-- STEP 6: Execute the Function
+
+SELECT FIND_GRADE(91) AS GRADE FROM DUAL;
+
+-- OUTPUT:
+-- GRADE
+-- -----
+-- O
+
+SELECT FIND_GRADE(75) AS GRADE FROM DUAL;
+
+-- OUTPUT:
+-- GRADE
+-- -----
+-- A
+
+
+-- STEP 7: Use the Function with Table Data
+
+SELECT STUDENT_ID, STUDENT_NAME, MARKS,
+       FIND_GRADE(MARKS) AS GRADE
+FROM STUDENT;
+
+-- OUTPUT:
+-- STUDENT_ID  STUDENT_NAME  MARKS  GRADE
+-- ----------  ------------  -----  -----
+-- 101         ARUN           85     A+
+-- 102         BALA           72     A
+-- 103         DIVYA          91     O
+
+
+-- VERIFY THE CREATED OBJECTS
+
+SELECT OBJECT_NAME, OBJECT_TYPE
+FROM USER_OBJECTS
+WHERE OBJECT_TYPE = 'PROCEDURE';
+
+-- OUTPUT:
+-- OBJECT_NAME   OBJECT_TYPE
+-- ------------  ------------
+-- GET_STUDENT   PROCEDURE
+
+
+SELECT OBJECT_NAME, OBJECT_TYPE
+FROM USER_OBJECTS
+WHERE OBJECT_TYPE = 'FUNCTION';
+
+-- OUTPUT:
+-- OBJECT_NAME   OBJECT_TYPE
+-- ------------  ------------
+-- FIND_GRADE    FUNCTION
+
