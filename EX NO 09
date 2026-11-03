@@ -1,0 +1,255 @@
+
+CREATE TABLE DEPARTMENT
+(
+    DEPT_ID NUMBER(3) PRIMARY KEY,
+    DEPT_NAME VARCHAR2(30)
+);
+
+-- OUTPUT:
+-- Table created.
+
+
+
+-- STEP 2: INSERT RECORDS INTO DEPARTMENT
+
+INSERT INTO DEPARTMENT VALUES (101, 'CSE');
+INSERT INTO DEPARTMENT VALUES (102, 'ECE');
+INSERT INTO DEPARTMENT VALUES (103, 'IT');
+
+-- OUTPUT:
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+
+
+-- ==========================================
+-- STEP 3: CREATE STUDENT TABLE
+-- ==========================================
+
+CREATE TABLE STUDENT
+(
+    STUDENT_ID NUMBER(5) PRIMARY KEY,
+    STUDENT_NAME VARCHAR2(30),
+    MARKS NUMBER(3),
+    DEPT_ID NUMBER(3),
+    CONSTRAINT FK_DEPT FOREIGN KEY (DEPT_ID)
+    REFERENCES DEPARTMENT(DEPT_ID)
+);
+
+-- OUTPUT:
+-- Table created.
+
+
+-- ==========================================
+-- STEP 4: INSERT RECORDS INTO STUDENT
+-- ==========================================
+
+INSERT INTO STUDENT VALUES (1001, 'ARUN', 85, 101);
+INSERT INTO STUDENT VALUES (1002, 'BALA', 78, 102);
+INSERT INTO STUDENT VALUES (1003, 'DIVYA', 92, 103);
+INSERT INTO STUDENT VALUES (1004, 'KAVI', 88, 101);
+
+-- OUTPUT:
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+
+
+-- ==========================================
+-- STEP 5: INNER JOIN
+-- ==========================================
+
+SELECT S.STUDENT_ID, S.STUDENT_NAME, D.DEPT_NAME
+FROM STUDENT S
+INNER JOIN DEPARTMENT D
+ON S.DEPT_ID = D.DEPT_ID;
+
+-- OUTPUT:
+-- STUDENT_ID  STUDENT_NAME  DEPT_NAME
+-- ----------  ------------  ----------
+-- 1001        ARUN          CSE
+-- 1002        BALA          ECE
+-- 1003        DIVYA         IT
+-- 1004        KAVI          CSE
+
+
+-- ==========================================
+-- STEP 6: LEFT OUTER JOIN
+-- ==========================================
+
+SELECT S.STUDENT_NAME, D.DEPT_NAME
+FROM STUDENT S
+LEFT OUTER JOIN DEPARTMENT D
+ON S.DEPT_ID = D.DEPT_ID;
+
+-- OUTPUT:
+-- STUDENT_NAME  DEPT_NAME
+-- ------------  ----------
+-- ARUN          CSE
+-- BALA          ECE
+-- DIVYA         IT
+-- KAVI          CSE
+
+
+-- ==========================================
+-- STEP 7: RIGHT OUTER JOIN
+-- ==========================================
+
+SELECT S.STUDENT_NAME, D.DEPT_NAME
+FROM STUDENT S
+RIGHT OUTER JOIN DEPARTMENT D
+ON S.DEPT_ID = D.DEPT_ID;
+
+-- OUTPUT:
+-- STUDENT_NAME  DEPT_NAME
+-- ------------  ----------
+-- ARUN          CSE
+-- KAVI          CSE
+-- BALA          ECE
+-- DIVYA         IT
+
+
+-- ==========================================
+-- STEP 8: FULL OUTER JOIN
+-- ==========================================
+
+SELECT S.STUDENT_NAME, D.DEPT_NAME
+FROM STUDENT S
+FULL OUTER JOIN DEPARTMENT D
+ON S.DEPT_ID = D.DEPT_ID;
+
+-- OUTPUT:
+-- STUDENT_NAME  DEPT_NAME
+-- ------------  ----------
+-- ARUN          CSE
+-- KAVI          CSE
+-- BALA          ECE
+-- DIVYA         IT
+
+
+-- ==========================================
+-- STEP 9: CREATE EMPLOYEE TABLE FOR SELF JOIN
+-- ==========================================
+
+CREATE TABLE EMPLOYEE
+(
+    EMP_ID NUMBER(5) PRIMARY KEY,
+    EMP_NAME VARCHAR2(30),
+    MANAGER_ID NUMBER(5)
+);
+
+INSERT INTO EMPLOYEE VALUES (1, 'RAJ', NULL);
+INSERT INTO EMPLOYEE VALUES (2, 'ARUN', 1);
+INSERT INTO EMPLOYEE VALUES (3, 'BALA', 1);
+
+-- OUTPUT:
+-- Table created.
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+
+
+-- ==========================================
+-- STEP 10: SELF JOIN
+-- ==========================================
+
+SELECT E.EMP_NAME EMPLOYEE, M.EMP_NAME MANAGER
+FROM EMPLOYEE E
+LEFT JOIN EMPLOYEE M
+ON E.MANAGER_ID = M.EMP_ID;
+
+-- OUTPUT:
+-- EMPLOYEE  MANAGER
+-- --------  -------
+-- RAJ
+-- ARUN      RAJ
+-- BALA      RAJ
+
+
+-- ==========================================
+-- STEP 11: SUBQUERY
+-- STUDENTS SCORING ABOVE AVERAGE MARKS
+-- ==========================================
+
+SELECT STUDENT_NAME, MARKS
+FROM STUDENT
+WHERE MARKS >
+(
+    SELECT AVG(MARKS)
+    FROM STUDENT
+);
+
+-- OUTPUT:
+-- STUDENT_NAME  MARKS
+-- ------------  -----
+-- DIVYA         92
+-- KAVI          88
+
+-- Average marks = 85.75
+
+
+-- ==========================================
+-- STEP 12: SUBQUERY WITH IN
+-- STUDENTS IN CSE DEPARTMENT
+-- ==========================================
+
+SELECT STUDENT_NAME
+FROM STUDENT
+WHERE DEPT_ID IN
+(
+    SELECT DEPT_ID
+    FROM DEPARTMENT
+    WHERE DEPT_NAME = 'CSE'
+);
+
+-- OUTPUT:
+-- STUDENT_NAME
+-- ------------
+-- ARUN
+-- KAVI
+
+
+-- ==========================================
+-- STEP 13: CORRELATED SUBQUERY
+-- STUDENTS WITH MAXIMUM MARKS IN THEIR DEPARTMENT
+-- ==========================================
+
+SELECT STUDENT_NAME, MARKS, DEPT_ID
+FROM STUDENT S1
+WHERE MARKS =
+(
+    SELECT MAX(MARKS)
+    FROM STUDENT S2
+    WHERE S1.DEPT_ID = S2.DEPT_ID
+);
+
+-- OUTPUT:
+-- STUDENT_NAME  MARKS  DEPT_ID
+-- ------------  -----  -------
+-- KAVI          88     101
+-- BALA          78     102
+-- DIVYA         92     103
+
+
+-- ==========================================
+-- STEP 14: DISPLAY ALL STUDENT RECORDS
+-- ==========================================
+
+SELECT * FROM STUDENT;
+
+-- OUTPUT:
+-- STUDENT_ID  STUDENT_NAME  MARKS  DEPT_ID
+-- ----------  ------------  -----  -------
+-- 1001        ARUN          85     101
+-- 1002        BALA          78     102
+-- 1003        DIVYA         92     103
+-- 1004        KAVI          88     101
+
+
+COMMIT;
+
+-- OUTPUT:
+-- Commit complete.
+
+Oracle.
