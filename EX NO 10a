@@ -1,0 +1,32 @@
+
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    N NUMBER;
+BEGIN
+    N := &N;
+
+    IF N > 0 THEN
+        DBMS_OUTPUT.PUT_LINE('The number is Positive');
+    ELSIF N < 0 THEN
+        DBMS_OUTPUT.PUT_LINE('The number is Negative');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('The number is Zero');
+    END IF;
+END;
+/
+
+-- OUTPUT 1:
+-- Enter value for N: 25
+-- The number is Positive
+-- PL/SQL procedure successfully completed.
+
+-- OUTPUT 2:
+-- Enter value for N: -15
+-- The number is Negative
+-- PL/SQL procedure successfully completed.
+
+-- OUTPUT 3:
+-- Enter value for N: 0
+-- The number is Zero
