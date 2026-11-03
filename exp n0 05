@@ -1,0 +1,182 @@
+
+-- SQL*Plus Connection Details
+-- SQL*Plus: Release 11.2.0.1.0 Production
+-- Enter user-name: A022@db2021
+-- Enter password:
+-- Connected to:
+-- Oracle Database 11g Release 11.2.0.1.0 - Production
+
+-- EXPERIMENT 5
+-- ANY, ALL, IN, EXISTS, NOT EXISTS, UNION,
+-- INTERSECT AND CONSTRAINTS
+
+-- 1. CREATE STUDENT TABLE
+
+CREATE TABLE STUDENT (
+    STUDENT_ID NUMBER(5) PRIMARY KEY,
+    STUDENT_NAME VARCHAR2(30),
+    DEPARTMENT VARCHAR2(20),
+    MARKS NUMBER(3)
+);
+
+-- Output:
+-- Table created.
+
+-- 2. INSERT RECORDS INTO STUDENT
+
+INSERT INTO STUDENT VALUES (101, 'ARUN', 'CSE', 85);
+INSERT INTO STUDENT VALUES (102, 'BALA', 'ECE', 78);
+INSERT INTO STUDENT VALUES (103, 'DIVYA', 'IT', 92);
+INSERT INTO STUDENT VALUES (104, 'KAVI', 'CSE', 88);
+
+-- Output for each insert:
+-- 1 row created.
+
+-- 3. CREATE ALUMNI TABLE
+
+CREATE TABLE ALUMNI (
+    STUDENT_NAME VARCHAR2(30)
+);
+
+-- Output:
+-- Table created.
+
+-- 4. INSERT RECORDS INTO ALUMNI
+
+INSERT INTO ALUMNI VALUES ('ARUN');
+INSERT INTO ALUMNI VALUES ('RAVI');
+INSERT INTO ALUMNI VALUES ('KAVI');
+
+-- Output for each insert:
+-- 1 row created.
+
+-- 5. IN OPERATOR
+
+SELECT *
+FROM STUDENT
+WHERE DEPARTMENT IN ('CSE', 'IT');
+
+-- Output:
+-- STUDENT_ID  STUDENT_NAME  DEPARTMENT  MARKS
+-- 101         ARUN          CSE         85
+-- 103         DIVYA         IT          92
+-- 104         KAVI          CSE         88
+
+-- 6. ANY OPERATOR
+
+SELECT *
+FROM STUDENT
+WHERE MARKS > ANY (
+    SELECT MARKS
+    FROM STUDENT
+    WHERE DEPARTMENT = 'ECE'
+);
+
+-- Output:
+-- STUDENT_ID  STUDENT_NAME  DEPARTMENT  MARKS
+-- 101         ARUN          CSE         85
+-- 103         DIVYA         IT          92
+-- 104         KAVI          CSE         88
+
+-- 7. ALL OPERATOR
+
+SELECT *
+FROM STUDENT
+WHERE MARKS > ALL (
+    SELECT MARKS
+    FROM STUDENT
+    WHERE DEPARTMENT = 'ECE'
+);
+
+-- Output:
+-- STUDENT_ID  STUDENT_NAME  DEPARTMENT  MARKS
+-- 101         ARUN          CSE         85
+-- 103         DIVYA         IT          92
+-- 104         KAVI          CSE         88
+
+-- 8. EXISTS OPERATOR
+
+SELECT STUDENT_NAME
+FROM STUDENT S
+WHERE EXISTS (
+    SELECT *
+    FROM ALUMNI A
+    WHERE A.STUDENT_NAME = S.STUDENT_NAME
+);
+
+-- Output:
+-- STUDENT_NAME
+-- ARUN
+-- KAVI
+
+-- 9. NOT EXISTS OPERATOR
+
+SELECT STUDENT_NAME
+FROM STUDENT S
+WHERE NOT EXISTS (
+    SELECT *
+    FROM ALUMNI A
+    WHERE A.STUDENT_NAME = S.STUDENT_NAME
+);
+
+-- Output:
+-- STUDENT_NAME
+-- BALA
+-- DIVYA
+
+-- 10. UNION OPERATOR
+
+SELECT STUDENT_NAME FROM STUDENT
+UNION
+SELECT STUDENT_NAME FROM ALUMNI;
+
+-- Output:
+-- STUDENT_NAME
+-- ARUN
+-- BALA
+-- DIVYA
+-- KAVI
+-- RAVI
+
+-- 11. INTERSECT OPERATOR
+
+SELECT STUDENT_NAME FROM STUDENT
+INTERSECT
+SELECT STUDENT_NAME FROM ALUMNI;
+
+-- Output:
+-- STUDENT_NAME
+-- ARUN
+-- KAVI
+
+-- 12. PRIMARY KEY CONSTRAINT TEST
+
+-- Execute separately to test the error:
+-- INSERT INTO STUDENT VALUES (101, 'SURESH', 'EEE', 80);
+
+-- Output:
+-- ORA-00001: unique constraint violated
+
+-- 13. NOT NULL PRIMARY KEY TEST
+
+-- Execute separately to test the error:
+-- INSERT INTO STUDENT VALUES (NULL, 'MANOJ', 'CSE', 75);
+
+-- Output:
+-- ORA-01400: cannot insert NULL into STUDENT_ID
+
+-- 14. DISPLAY ALL STUDENT RECORDS
+
+SELECT * FROM STUDENT;
+
+-- Output:
+-- STUDENT_ID  STUDENT_NAME  DEPARTMENT  MARKS
+-- 101         ARUN          CSE         85
+-- 102         BALA          ECE         78
+-- 103         DIVYA         IT          92
+-- 104         KAVI          CSE         88
+
+COMMIT;
+
+-- Output:
+-- Commit complete.
