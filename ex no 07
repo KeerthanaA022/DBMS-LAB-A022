@@ -1,0 +1,167 @@
+
+-- SQL*Plus: Release 11.2.0.1.0 Production
+-- Enter user-name: A022@db2021
+-- Enter password:
+-- Connected to:
+-- Oracle Database 11g Release 11.2.0.1.0 - Production
+
+
+CREATE TABLE STUDENT
+(
+    STUDENT_ID NUMBER(5) PRIMARY KEY,
+    STUDENT_NAME VARCHAR2(30),
+    DEPARTMENT VARCHAR2(20),
+    MARKS NUMBER(3)
+);
+
+-- Table created.
+
+-- 2. INSERT RECORDS
+
+INSERT INTO STUDENT VALUES (101,'ARUN','CSE',85);
+INSERT INTO STUDENT VALUES (102,'BALA','ECE',78);
+INSERT INTO STUDENT VALUES (103,'DIVYA','IT',92);
+INSERT INTO STUDENT VALUES (104,'KAVI','CSE',88);
+
+
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+-- 1 row created.
+
+-- 3. CREATE A VIEW OF CSE STUDENTS
+
+CREATE VIEW CSE_STUDENTS AS
+SELECT STUDENT_ID, STUDENT_NAME, MARKS
+FROM STUDENT
+WHERE DEPARTMENT = 'CSE';
+
+
+-- View created.
+
+-- 4. RETRIEVE DATA FROM THE VIEW
+
+SELECT * FROM CSE_STUDENTS;
+
+-- OUTPUT:
+-- STUDENT_ID  STUDENT_NAME  MARKS
+-- ----------  ------------  -----
+-- 101         ARUN          85
+-- 104         KAVI          88
+
+-- 5. CREATE A SEQUENCE
+
+CREATE SEQUENCE STUD_SEQ
+START WITH 105
+INCREMENT BY 1
+MINVALUE 105
+MAXVALUE 999
+NOCYCLE
+NOCACHE;
+
+-- OUTPUT:
+-- Sequence created.
+
+-- 6. GENERATE SEQUENCE VALUES
+
+SELECT STUD_SEQ.NEXTVAL FROM DUAL;
+
+-- OUTPUT:
+-- NEXTVAL
+-- -------
+-- 105
+
+SELECT STUD_SEQ.NEXTVAL FROM DUAL;
+
+-- OUTPUT:
+-- NEXTVAL
+-- -------
+-- 106
+
+-- 7. INSERT USING THE SEQUENCE
+
+INSERT INTO STUDENT
+VALUES (STUD_SEQ.NEXTVAL,'RAVI','ECE',81);
+
+-- OUTPUT:
+-- 1 row created.
+
+-- VERIFY THE INSERT
+
+SELECT * FROM STUDENT;
+
+-- OUTPUT:
+-- STUDENT_ID  STUDENT_NAME  DEPARTMENT  MARKS
+-- ----------  ------------  ----------  -----
+-- 101         ARUN          CSE         85
+-- 102         BALA          ECE         78
+-- 103         DIVYA         IT          92
+-- 104         KAVI          CSE         88
+-- 107         RAVI          ECE         81
+
+-- 8. CREATE AN INDEX
+
+CREATE INDEX IDX_STUDENT_NAME
+ON STUDENT(STUDENT_NAME);
+
+-- OUTPUT:
+-- Index created.
+
+-- VERIFY THE INDEX
+
+SELECT INDEX_NAME, TABLE_NAME
+FROM USER_INDEXES
+WHERE TABLE_NAME = 'STUDENT';
+
+-- OUTPUT:
+-- INDEX_NAME          TABLE_NAME
+-- ------------------  ----------
+-- IDX_STUDENT_NAME    STUDENT
+-- SYS_C001234         STUDENT
+
+-- SYS_C001234 is automatically generated
+-- for the primary key.
+
+-- 9. INSERT ANOTHER RECORD
+
+INSERT INTO STUDENT VALUES (108,'SURESH','IT',90);
+
+-- OUTPUT:
+-- 1 row created.
+
+-- 10. CREATE A SAVEPOINT
+
+SAVEPOINT SP1;
+
+-- OUTPUT:
+-- Savepoint created.
+
+-- 11. ROLL BACK TO THE SAVEPOINT
+
+ROLLBACK TO SP1;
+
+-- OUTPUT:
+-- Rollback complete.
+
+-- 12. VERIFY THE RECORDS
+
+SELECT * FROM STUDENT;
+
+-- OUTPUT:
+-- STUDENT_ID  STUDENT_NAME  DEPARTMENT  MARKS
+-- ----------  ------------  ----------  -----
+-- 101         ARUN          CSE         85
+-- 102         BALA          ECE         78
+-- 103         DIVYA         IT          92
+-- 104         KAVI          CSE         88
+-- 107         RAVI          ECE         81
+-- 108         SURESH        IT          90
+
+-- 13. COMMIT THE TRANSACTION
+
+COMMIT;
+
+-- OUTPUT:
+-- Commit complete.
+
+-- were created and executed successfully in Oracle.
